@@ -1,0 +1,99 @@
+services:
+  metabase:
+    image: metabase/metabase:latest
+    container_name: metabase
+    hostname: metabase
+    volumes:
+      - /dev/urandom:/dev/random:ro
+  #  ports:
+   #   - 3000:3000
+    environment:
+      MB_DB_TYPE: postgres
+      MB_DB_DBNAME: ${MB_DB_DBNAME}
+      MB_DB_PORT: ${DATABASE_PORT}
+      MB_DB_USER: ${MB_DB_USER}
+      MB_DB_PASS: ${MB_DB_PASS}
+      MB_DB_HOST: ${DATABASE_HOST}
+    healthcheck:
+      test: curl --fail -I http://metabase:3000/api/health || exit 1
+      interval: 15s
+      timeout: 5s
+      retries: 5
+
+
+  postgres:
+    image: postgis/postgis:18-3.6 
+    container_name: postgres
+    hostname: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_USERNAME: ${DATABASE_USERNAME}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+    volumes:
+      - pg_data:/var/lib/postgresql/
+      - ./postgres/postgres-init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${DATABASE_USERNAME} -d $${DATABASE_NAME}"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+
+    
+  caddy:
+    image: caddy:latest
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./caddy:/etc/caddy
+      - ./staticfiles:/srv/static
+    
+  django:
+    build: .
+    # ports:
+    #   - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+        restart: true
+    environment:
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
+      DEBUG: ${DEBUG}
+      DJANGO_LOGLEVEL: ${DJANGO_LOGLEVEL}
+      DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS}
+      DATABASE_ENGINE: ${DATABASE_ENGINE}
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_USERNAME: ${DATABASE_USERNAME}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_HOST: ${DATABASE_HOST}
+      DATABASE_PORT: ${DATABASE_PORT}
+      DOXPOP_USER: ${DOXPOP_USER}
+      DOXPOP_PASS: ${DOXPOP_PASS}
+      DOXPOP_URL: ${DOXPOP_URL}
+      MAPBOX_TOKEN: ${MAPBOX_TOKEN}
+    
+    
+  ofelia:
+    image: mcuadros/ofelia:latest
+    depends_on:
+      - django
+    restart: "unless-stopped"
+    command: daemon --docker
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    labels:
+      ofelia.enabled: "true"
+      ofelia.job-run.fetch-cases.container: 'ev-dashboard-django'
+      ofelia.job-run.fetch-cases.schedule: "0 3 * * *"
+      ofelia.job-run.fetch-cases.no-overlap: "true"
+      ofelia.job-run.fetch-cases.command: "python /app/manage.py fetch_new_filings"
+
+volumes:
+    pg_data:
+        external: false
+

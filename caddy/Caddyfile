@@ -1,0 +1,13 @@
+{
+    email kristina.trinity@anymouse.org
+}
+
+
+cityrising.anymouse.org {
+    handle /admin/static/* {
+        root * /srv/
+        file_server
+    }
+    reverse_proxy /admin django:8000
+    reverse_proxy metabase:3000
+}
