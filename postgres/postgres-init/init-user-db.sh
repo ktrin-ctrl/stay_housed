@@ -9,7 +9,7 @@ psql -v ON_ERROR_STOP=1 --username $POSTGRES_USER --dbname $POSTGRES_DB <<-EOSQL
 
 EOSQL
 
-psql -v ON_ERROR_STOP=1 --username $DATABASE_USERNAME --dbname $DATABASE_NAME <<-EOSQL
+psql -v ON_ERROR_STOP=1 --username $POSTGRES_USER --dbname $DATABASE_NAME <<-EOSQL
     CREATE EXTENSION postgis;
 EOSQL
 
