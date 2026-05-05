@@ -59,7 +59,7 @@ class Address(models.Model):
 
 class Phone(models.Model):
 
-    phone_number = models.CharField(blank=True, null=True, max_length=12)
+    phone_number = models.CharField(blank=True, null=True, max_length=26)
     phone_type = models.CharField(blank=True, null=True, max_length=50)
     voice_or_fax_code = models.CharField(blank=True, null=True, max_length=50)
 
