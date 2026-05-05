@@ -1,13 +1,13 @@
 {
-    email kristina.trinity@anymouse.org
+    email  {env.DOMAIN_EMAIL}
 }
 
 
-cityrising.anymouse.org {
-    handle /admin/static/* {
+ {env.WEBHOSTNAME} {
+    handle /django/admin/static/* {
         root * /srv/
         file_server
     }
-    reverse_proxy /admin django:8000
+    reverse_proxy /django/ django:8000
     reverse_proxy metabase:3000
 }
