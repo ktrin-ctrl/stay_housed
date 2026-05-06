@@ -1,9 +1,9 @@
 {
-    email  {env.DOMAIN_EMAIL}
+    email  {$env.DOMAIN_EMAIL}
 }
 
 
- {env.WEBHOSTNAME} {
+ {$env.WEBHOSTNAME} {
     handle /django/admin/static/* {
         root * /srv/
         file_server
