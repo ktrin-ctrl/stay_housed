@@ -3,11 +3,11 @@
 }
 
 
- {$WEBHOSTNAME} {
+ cityrising2.anymouse.org {
     reverse_proxy metabase:3000
 }
 
- https://{$WEBHOSTNAME}:4443 {
+ https://cityrising2.anymouse.org:4443 {
     handle /admin/static/* {
         root * /srv/
         file_server
