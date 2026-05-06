@@ -57,9 +57,13 @@ services:
       - "80:80"
       - "443:443"
       - "443:443/udp"
+    environment:
+      DOMAIN_EMAIL: ${DOMAIN_EMAIL}
+      WEBHOSTNAME: ${WEBHOSTNAME}
     volumes:
       - ./caddy:/etc/caddy
       - ./staticfiles:/srv/static
+    
     
   django:
     build: .
@@ -84,6 +88,9 @@ services:
       DOXPOP_PASS: ${DOXPOP_PASS}
       DOXPOP_URL: ${DOXPOP_URL}
       MAPBOX_TOKEN: ${MAPBOX_TOKEN}
+    volumes:
+    - ./staticfiles:/app/staticfiles
+
     
     
   ofelia:
