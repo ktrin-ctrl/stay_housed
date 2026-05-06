@@ -4,10 +4,13 @@
 
 
  {$WEBHOSTNAME} {
-    handle /django/admin/static/* {
+    reverse_proxy metabase:3000
+}
+
+ {$WEBHOSTNAME}:8000 {
+    handle /admin/static/* {
         root * /srv/
         file_server
     }
-    reverse_proxy /django/ django:8000
-    reverse_proxy /metabase/ metabase:3000
-}
+    reverse_proxy  django:8000
+ }
