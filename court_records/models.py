@@ -360,6 +360,7 @@ class CourtCase(models.Model):
     def subject_property(self):
         return Address.objects.filter(actors__primary_actor__court_case=self).filter(actors__primary_actor__assigned_case_role='Defendant').order_by('id').first()
 
+    subject_prop_address = models.CharField(max_length=254, blank=True, null=True)
     subject_prop_location = models.PointField(null=True)
     subject_prop_location_lat = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
     subject_prop_location_lon = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
@@ -374,7 +375,7 @@ class CourtCase(models.Model):
 
 
     def save(self, *args, **kwargs):
-        if self.subject_property is not None and selfsubject_prop_location_lat is None:
+        if self.subject_property is not None and self.subject_prop_location_lat is None:
             self.subject_prop_location_lat  = self.subject_property.geometry.x
             self.subject_prop_location_lon  = self.subject_property.geometry.y
             self.subject_prop_location = self.subject_property.geometry
