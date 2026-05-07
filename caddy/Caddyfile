@@ -8,8 +8,8 @@ cityrising2.anymouse.org {
 }
 
 admin.cityrising.anymouse.org {
-    handle /admin/static/* {
-        root * /srv/
+    handle_path /static/* {
+        root * /srv/static/
         file_server
     }
     reverse_proxy  django:8000
