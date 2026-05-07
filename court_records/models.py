@@ -379,6 +379,8 @@ class CourtCase(models.Model):
             self.subject_prop_location_lat  = self.subject_property.geometry.x
             self.subject_prop_location_lon  = self.subject_property.geometry.y
             self.subject_prop_location = self.subject_property.geometry
+            self.subject_prop_address = self.subject_property.__str__()
+
         super().save(*args, **kwargs)
 
 
