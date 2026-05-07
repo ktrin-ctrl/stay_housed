@@ -375,7 +375,7 @@ class CourtCase(models.Model):
 
 
     def save(self, *args, **kwargs):
-        if self.subject_property is not None and self.subject_prop_location_lat is None:
+        if self.subject_property is not None and self.subject_property.geometry is not None and self.subject_prop_location_lat is None:
             self.subject_prop_location_lat  = self.subject_property.geometry.x
             self.subject_prop_location_lon  = self.subject_property.geometry.y
             self.subject_prop_location = self.subject_property.geometry
