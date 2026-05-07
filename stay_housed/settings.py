@@ -27,6 +27,7 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", 'django-insecure-6qt@b5p%-p#48x9*13i
 DEBUG = (os.environ.get('DEBUG') == "True")
 
 ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS","localhost").split(",")
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 # Application definition
 
