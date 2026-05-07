@@ -3,14 +3,14 @@
 }
 
 
- cityrising2.anymouse.org {
+cityrising2.anymouse.org {
     reverse_proxy metabase:3000
 }
 
- https://cityrising2.anymouse.org:4443 {
+admin.cityrising.anymouse.org {
     handle /admin/static/* {
         root * /srv/
         file_server
     }
     reverse_proxy  django:8000
- }
+}
