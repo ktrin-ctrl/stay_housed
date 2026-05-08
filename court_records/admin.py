@@ -59,7 +59,7 @@ class CourtCaseAdmin(admin.ModelAdmin):
     readonly_fields = ('subject_prop_address', 'subject_prop_location', 'subject_prop_location_lat', 'subject_prop_location_lon', 'subject_property', 'defendants', 'plaintiffs', 'actors', 'events', 'minutes', 'charges', 'sentences', 'payments', 'receivables', 'dispositions')
     #excluded = ['']
     list_filter = ['court', 'filed_date', 'local_status_code', 'is_marked_expunged']
-    search_fields = ["subject_property__address_line1","subject_property__address_line2", "subject_property__address_postal_code",  "subject_property__address_city", "actors__full_name", "case_number", "case_caption"]
+    search_fields = ["subject_prop_hardcode__address_line1","subject_prop_hardcode__address_line2", "subject_prop_hardcode__address_postal_code",  "subject_prop_hardcode__address_city", "actors__full_name", "case_number", "case_caption"]
 
 
 admin.site.register(CourtCase, CourtCaseAdmin)

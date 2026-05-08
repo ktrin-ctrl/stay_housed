@@ -23,7 +23,7 @@ class Court(models.Model):
     court_type = models.CharField(blank=True, null=True, max_length=254)
     court_time_zone = models.CharField(blank=True, null=True, max_length=254)
     court_consolidated_display_name = models.CharField(blank=True, null=True, max_length=254)
-    uri = models.URLField(primary_key=True)
+    uri = models.URLField(primary_key=True, max_length=1024)
     json_source = models.JSONField()
 
     def __str__(self):
@@ -40,7 +40,7 @@ class Address(models.Model):
     #pnt_geom = models.PointField(null=True)
     geometry = models.PointField(null=True)
     geocoding_accuracy = models.CharField(blank=True, null=True)
-    #uri = models.URLField(primary_key=True)
+    #uri = models.URLField(primary_key=True, max_length=1024)
     #json_source = models.JSONField(null=True, blank=True)
 
     def lat(self):
@@ -89,7 +89,7 @@ class Actors(models.Model):
 
     date_of_birth = models.DateField(blank=True, null=True)
 
-    actor_uri = models.URLField(primary_key=True)
+    actor_uri = models.URLField(primary_key=True, max_length=1024)
     json_source = models.JSONField(null=True, blank=True)
 
 
@@ -123,7 +123,7 @@ class Event(models.Model):
     event_date_time = models.DateTimeField(blank=True, null=True)
     event_hearing_type_code = models.CharField(blank=True, null=True, max_length=10)
 
-    #event_uri = models.URLField(primary_key=True)
+    #event_uri = models.URLField(primary_key=True, max_length=1024)
     json_source = models.JSONField(null=True, blank=True)
 
     def __str__(self):
@@ -144,7 +144,7 @@ class Minutes(models.Model):
     minute_creation_date_time = models.DateTimeField(blank=True, null=True)
     minute_hard_copy_physical_location = models.CharField(blank=True, null=True, max_length=254)
 
-    #minutes_uri = models.URLField(primary_key=True)
+    #minutes_uri = models.URLField(primary_key=True, max_length=1024)
     json_source = models.JSONField(null=True, blank=True)
 
     def __str__(self):
@@ -161,16 +161,16 @@ class CourtPayment(models.Model):
     court_payment_amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     court_payment_date = models.DateField(blank=True, null=True)
 
-    court_payment_case_uri = models.URLField(blank=True, null=True) 
+    court_payment_case_uri = models.CharField(blank=True, null=True, max_length=1024) 
     court_payment_court_case = models.ForeignKey("CourtCase", on_delete=models.CASCADE, blank=True, null=True)
 
-    court_payment_payor_actor_uri = models.URLField(blank=True, null=True)
+    court_payment_payor_actor_uri = models.CharField(blank=True, null=True, max_length=1024)
     court_payment_payor_actor = models.ForeignKey("Actors", on_delete=models.CASCADE, related_name='payor', blank=True, null=True)
 
     court_payment_recipient_actor = models.ForeignKey("Actors", on_delete=models.CASCADE, related_name='recipent', blank=True, null=True)
-    court_payment_recipient_actor_uri = models.URLField(blank=True, null=True)
+    court_payment_recipient_actor_uri = models.CharField(blank=True, null=True, max_length=1024)
 
-    #court_payment_uri = models.URLField(primary_key=True)
+    #court_payment_uri = models.URLField(primary_key=True, max_length=1024)
     json_source = models.JSONField(null=True, blank=True)
 
     def __str__(self):
@@ -212,20 +212,20 @@ class Charge(models.Model):
     charge_date = models.DateField(blank=True, null=True)
     charge_offense_date_time = models.DateTimeField(blank=True, null=True)
     
-    case_uri = models.URLField(blank=True, null=True)
+    case_uri = models.CharField(blank=True, null=True, max_length=1024)
     court_case = models.ForeignKey("CourtCase", on_delete=models.CASCADE, blank=True, null=True)
     
-    dispositions_uri = models.URLField(blank=True, null=True)
+    dispositions_uri = models.CharField(blank=True, null=True, max_length=1024)
     dispositions = models.ManyToManyField("Disposition", related_name="parent_dispositions")
 
-    sentences_uri = models.URLField(blank=True, null=True)
+    sentences_uri = models.CharField(blank=True, null=True, max_length=1024)
     sentences = models.ManyToManyField("Sentence", related_name="parent_sentences")
     
-    actor_uri = models.URLField(blank=True, null=True)
+    actor_uri = models.CharField(blank=True, null=True, max_length=1024)
     actor = models.ForeignKey(Actors, on_delete=models.CASCADE, blank=True, null=True)
 
 
-   # uri = models.URLField(primary_key=True)
+   # uri = models.URLField(primary_key=True, max_length=1024)
     json_source = models.JSONField(null=True, blank=True)
 
     def __str__(self):
@@ -247,10 +247,10 @@ class Sentence(models.Model):
     sentence_number = models.CharField(blank=True, null=True, max_length=254)
     sentence_concurrency_group = models.CharField(blank=True, null=True, max_length=254)
     sentence_description = models.CharField(blank=True, null=True, max_length=254)
-    charges_uri = models.URLField(blank=True, null=True)
+    charges_uri = models.CharField(blank=True, null=True, max_length=1024)
     charges = models.ManyToManyField(Charge, related_name="parent_charges")
 
-   # uri = models.URLField(primary_key=True)
+   # uri = models.URLField(primary_key=True, max_length=1024)
     json_source = models.JSONField(null=True, blank=True)
 
     def __str__(self):
@@ -266,10 +266,10 @@ class Disposition(models.Model):
     criminal_disposition_number = models.IntegerField(blank=True, null=True)
     criminal_disposition_type = models.CharField(blank=True, null=True, max_length=254)
 
-    charge_uri = models.URLField(blank=True, null=True) 
+    charge_uri = models.CharField(blank=True, null=True, max_length=1024) 
     charge = models.ForeignKey("Charge", on_delete=models.CASCADE)
 
-    #uri = models.URLField(primary_key=True)
+    #uri = models.URLField(primary_key=True, max_length=1024)
     json_source = models.JSONField(null=True, blank=True)
 
     def __str__(self):
@@ -293,15 +293,15 @@ class Receivable(models.Model):
     court_receivable_account_desc = models.CharField(blank=True, null=True, max_length=254)
 
     court_case = models.ForeignKey("CourtCase", on_delete=models.CASCADE, related_name="parent_court_case", blank=True, null=True)
-    case_uri = models.URLField(blank=True, null=True)
+    case_uri = models.CharField(blank=True, null=True, max_length=1024)
 
     recipient_actor = models.ForeignKey(Actors, on_delete=models.CASCADE, related_name="recipient_actors", blank=True, null=True)
-    recipient_actor_uri = models.URLField(blank=True, null=True)
+    recipient_actor_uri = models.CharField(blank=True, null=True, max_length=1024)
 
     payor_actor = models.ForeignKey(Actors, on_delete=models.CASCADE, related_name="payor_actors", blank=True, null=True)
-    payor_actor_uri = models.URLField(blank=True, null=True)
+    payor_actor_uri = models.CharField(blank=True, null=True, max_length=1024)
 
-  #  uri = models.URLField(primary_key=True)
+  #  uri = models.URLField(primary_key=True, max_length=1024)
     json_source = models.JSONField(null=True, blank=True)
 
     def __str__(self):
@@ -328,33 +328,33 @@ class CourtCase(models.Model):
     as_of_timestamp = models.DateTimeField(blank=True, null=True)
 
     court = models.ForeignKey(Court, on_delete=models.CASCADE, null=True, blank=True)
-    court_uri = models.URLField(blank=True, null=True)
+    court_uri = models.CharField(blank=True, null=True, max_length=1024)
 
     actors = models.ManyToManyField(Actors, through=Relationship, through_fields=('court_case', 'actor',))
-    actors_uri = models.URLField(blank=True, null=True)
+    actors_uri = models.CharField(blank=True, null=True, max_length=1024)
 
     events = models.ManyToManyField(Event)
-    events_uri = models.URLField(blank=True, null=True)
+    events_uri = models.CharField(blank=True, null=True, max_length=1024)
     
     minutes = models.ManyToManyField(Minutes)
-    minutes_uri = models.URLField(blank=True, null=True)
+    minutes_uri = models.CharField(blank=True, null=True, max_length=1024)
     
     charges = models.ManyToManyField(Charge)
-    charges_uri = models.URLField(blank=True, null=True)
+    charges_uri = models.CharField(blank=True, null=True, max_length=1024)
 
     dispositions = models.ManyToManyField(Disposition)
-    dispositions_uri = models.URLField(blank=True, null=True)
+    dispositions_uri = models.CharField(blank=True, null=True, max_length=1024)
 
     sentences = models.ManyToManyField(Sentence)
-    sentences_uri = models.URLField(blank=True, null=True)
+    sentences_uri = models.CharField(blank=True, null=True, max_length=1024)
 
     payments = models.ManyToManyField(CourtPayment)
-    payments_uri = models.URLField(blank=True, null=True)
+    payments_uri = models.CharField(blank=True, null=True, max_length=1024)
 
     receivables = models.ManyToManyField(Receivable)
-    receivables_uri = models.URLField(blank=True, null=True)
+    receivables_uri = models.CharField(blank=True, null=True, max_length=1024)
 
-    uri = models.URLField(primary_key=True)
+    uri = models.CharField(primary_key=True, max_length=1024)
     json_source = models.JSONField()
 
     @property
@@ -364,8 +364,8 @@ class CourtCase(models.Model):
     subject_prop_hardcode = models.ForeignKey(Address, blank=True, null=True, on_delete=models.SET_NULL)
     subject_prop_address = models.CharField(max_length=254, blank=True, null=True)
     subject_prop_location = models.PointField(null=True)
-    subject_prop_location_lat = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
-    subject_prop_location_lon = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
+    subject_prop_location_lat = models.FloatField(blank=True, null=True)
+    subject_prop_location_lon = models.FloatField(blank=True, null=True)
 
     @property
     def defendants(self):
