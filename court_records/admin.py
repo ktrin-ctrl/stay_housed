@@ -30,10 +30,12 @@ class AddressAdmin(admin.GISModelAdmin):
                     print(f'Second attempt: {address_to_locate}, {location}')
                     geocode_accuracy = location['Geocoding Accuracy']
             else: 
-             #   if geocode_accuracy > 90:
-                addy.geometry = location['PNT_WKT']
+                if geocode_accuracy in ['rooftop', 'parcel', 'point', 'interpolated']:
+                    addy.geometry = location['PNT_WKT']
+                    updated_count += 1
+                addy.geocoding_accuracy = location['Geocoding Accuracy']
                 addy.save()
-                updated_count += 1
+                    
                 #break
         self.message_user(
             request,
@@ -54,12 +56,10 @@ class AddressAdmin(admin.GISModelAdmin):
 class CourtCaseAdmin(admin.ModelAdmin):
     list_display = ('case_number', 'case_caption', 'filed_date', 'subject_property')
     #readonly_fields = ('')
-    readonly_fields = ('subject_property', 'defendants', 'plaintiffs', 'actors', 'events', 'minutes', 'charges', 'sentences', 'payments', 'receivables', 'dispositions')
+    readonly_fields = ('subject_prop_address', 'subject_prop_location', 'subject_prop_location_lat', 'subject_prop_location_lon', 'subject_property', 'defendants', 'plaintiffs', 'actors', 'events', 'minutes', 'charges', 'sentences', 'payments', 'receivables', 'dispositions')
     #excluded = ['']
-
-    # @admin.display(description="Location")
-    # def get_subject_address(self, obj):
-    #     return f'{Actor.objects.}'
+    list_filter = ['court', 'filed_date', 'local_status_code', 'is_marked_expunged']
+    search_fields = ["subject_property__address_line1","subject_property__address_line2", "subject_property__address_postal_code",  "subject_property__address_city", "actors__full_name", "case_number", "case_caption"]
 
 
 admin.site.register(CourtCase, CourtCaseAdmin)

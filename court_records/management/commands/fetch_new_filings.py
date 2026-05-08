@@ -5,7 +5,9 @@ import requests
 import os
 import json
 from django.apps import apps
-  
+import re
+
+
 from requests.adapters import HTTPAdapter, Retry
 from . import geocode #import geocode_street_address
 
@@ -33,6 +35,8 @@ def fetch_courts(s, county_fips):
                 uri  = court.get('court_uri'),
                 json_source = json.dumps(court),
             )
+            if 'Superior Court' in court.get('court_display_name'):
+                c.court_consolidated_display_name =  re.sub(r'\d+', '', court.get('court_display_name')).strip()
             c.save()
 
 # This is used for Events, Minutes, CourtPayment, Charge, Disposition, Receivable
@@ -98,7 +102,9 @@ def fetch_actors(s, uri, case_uri):
                 if address_object.geometry is None:
                     address_to_locate = address_object.__str__()
                     location = geocode.geocode_street_address(address_to_locate)
-                    address_object.geometry = location['PNT_WKT']
+                    if location['Geocoding Accuracy'] in ['rooftop', 'parcel', 'point', 'interpolated']:
+                        address_object.geometry = location['PNT_WKT']
+                    address_object.geocoding_accuracy = location['Geocoding Accuracy']
                     address_object.save()
                 obj.addresses.add(address_object)    
 
