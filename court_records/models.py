@@ -23,7 +23,7 @@ class Court(models.Model):
     court_type = models.CharField(blank=True, null=True, max_length=254)
     court_time_zone = models.CharField(blank=True, null=True, max_length=254)
     court_consolidated_display_name = models.CharField(blank=True, null=True, max_length=254)
-    uri = models.URLField(primary_key=True, max_length=1024)
+    uri = models.CharField(primary_key=True, max_length=1024)
     json_source = models.JSONField()
 
     def __str__(self):
@@ -40,7 +40,7 @@ class Address(models.Model):
     #pnt_geom = models.PointField(null=True)
     geometry = models.PointField(null=True)
     geocoding_accuracy = models.CharField(blank=True, null=True)
-    #uri = models.URLField(primary_key=True, max_length=1024)
+    #uri = models.CharField(primary_key=True, max_length=1024)
     #json_source = models.JSONField(null=True, blank=True)
 
     def lat(self):
@@ -89,7 +89,7 @@ class Actors(models.Model):
 
     date_of_birth = models.DateField(blank=True, null=True)
 
-    actor_uri = models.URLField(primary_key=True, max_length=1024)
+    actor_uri = models.CharField(primary_key=True, max_length=1024)
     json_source = models.JSONField(null=True, blank=True)
 
 
@@ -123,7 +123,7 @@ class Event(models.Model):
     event_date_time = models.DateTimeField(blank=True, null=True)
     event_hearing_type_code = models.CharField(blank=True, null=True, max_length=10)
 
-    #event_uri = models.URLField(primary_key=True, max_length=1024)
+    #event_uri = models.CharField(primary_key=True, max_length=1024)
     json_source = models.JSONField(null=True, blank=True)
 
     def __str__(self):
@@ -144,7 +144,7 @@ class Minutes(models.Model):
     minute_creation_date_time = models.DateTimeField(blank=True, null=True)
     minute_hard_copy_physical_location = models.CharField(blank=True, null=True, max_length=254)
 
-    #minutes_uri = models.URLField(primary_key=True, max_length=1024)
+    #minutes_uri = models.CharField(primary_key=True, max_length=1024)
     json_source = models.JSONField(null=True, blank=True)
 
     def __str__(self):
@@ -170,7 +170,7 @@ class CourtPayment(models.Model):
     court_payment_recipient_actor = models.ForeignKey("Actors", on_delete=models.CASCADE, related_name='recipent', blank=True, null=True)
     court_payment_recipient_actor_uri = models.CharField(blank=True, null=True, max_length=1024)
 
-    #court_payment_uri = models.URLField(primary_key=True, max_length=1024)
+    #court_payment_uri = models.CharField(primary_key=True, max_length=1024)
     json_source = models.JSONField(null=True, blank=True)
 
     def __str__(self):
@@ -225,7 +225,7 @@ class Charge(models.Model):
     actor = models.ForeignKey(Actors, on_delete=models.CASCADE, blank=True, null=True)
 
 
-   # uri = models.URLField(primary_key=True, max_length=1024)
+   # uri = models.CharField(primary_key=True, max_length=1024)
     json_source = models.JSONField(null=True, blank=True)
 
     def __str__(self):
@@ -250,7 +250,7 @@ class Sentence(models.Model):
     charges_uri = models.CharField(blank=True, null=True, max_length=1024)
     charges = models.ManyToManyField(Charge, related_name="parent_charges")
 
-   # uri = models.URLField(primary_key=True, max_length=1024)
+   # uri = models.CharField(primary_key=True, max_length=1024)
     json_source = models.JSONField(null=True, blank=True)
 
     def __str__(self):
@@ -269,7 +269,7 @@ class Disposition(models.Model):
     charge_uri = models.CharField(blank=True, null=True, max_length=1024) 
     charge = models.ForeignKey("Charge", on_delete=models.CASCADE)
 
-    #uri = models.URLField(primary_key=True, max_length=1024)
+    #uri = models.CharField(primary_key=True, max_length=1024)
     json_source = models.JSONField(null=True, blank=True)
 
     def __str__(self):
@@ -301,7 +301,7 @@ class Receivable(models.Model):
     payor_actor = models.ForeignKey(Actors, on_delete=models.CASCADE, related_name="payor_actors", blank=True, null=True)
     payor_actor_uri = models.CharField(blank=True, null=True, max_length=1024)
 
-  #  uri = models.URLField(primary_key=True, max_length=1024)
+  #  uri = models.CharField(primary_key=True, max_length=1024)
     json_source = models.JSONField(null=True, blank=True)
 
     def __str__(self):
