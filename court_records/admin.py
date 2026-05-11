@@ -4,7 +4,9 @@ from django.utils.translation import ngettext
 from django.contrib import messages
 from django.contrib.gis.db import models
 
-from court_records.models import CourtCase, Court, Address, Phone, Identifier, Actors, Relationship, Event, Minutes, CourtPayment, Charge, SentenceLength, Sentence, Disposition, Receivable, Mailing, API_Usage
+from court_records.models import CourtCase, Court, Address, Phone, Identifier, Actors, Relationship, Event, Minutes, API_Usage, OverlayGeography
+
+from court_records.models import CourtPayment, Charge, SentenceLength, Sentence, Disposition, Receivable, Mailing
 
 from .management.commands import geocode #import geocode_street_address
 
@@ -19,7 +21,7 @@ class AddressAdmin(admin.GISModelAdmin):
         total_count = queryset.count()
         for addy in queryset:
             address_to_locate = addy.__str__()
-            location = geocode.geocode_street_address(address_to_locate)
+               location = geocode.geocode_street_address(address_to_locate)
             print(address_to_locate, location)
             try: 
                 geocode_accuracy = location['Geocoding Accuracy']
@@ -61,7 +63,12 @@ class CourtCaseAdmin(admin.ModelAdmin):
     list_filter = ['court', 'filed_date', 'local_status_code', 'is_marked_expunged']
     search_fields = ["subject_prop_hardcode__address_line1","subject_prop_hardcode__address_line2", "subject_prop_hardcode__address_postal_code",  "subject_prop_hardcode__address_city", "actors__full_name", "case_number", "case_caption"]
 
+class OverlayGeographyAdmin(admin.GISModelAdmin):
+     formfield_overrides = {
+        models.MultiPolygonField: {"widget": OpenLayersWidget},
+    }
 
+admin.site.register(OverlayGeography, OverlayGeographyAdmin)
 admin.site.register(CourtCase, CourtCaseAdmin)
 admin.site.register(Court)
 admin.site.register(Address, AddressAdmin)
