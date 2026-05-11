@@ -21,7 +21,7 @@ class AddressAdmin(admin.GISModelAdmin):
         total_count = queryset.count()
         for addy in queryset:
             address_to_locate = addy.__str__()
-               location = geocode.geocode_street_address(address_to_locate)
+            location = geocode.geocode_street_address(address_to_locate)
             print(address_to_locate, location)
             try: 
                 geocode_accuracy = location['Geocoding Accuracy']
