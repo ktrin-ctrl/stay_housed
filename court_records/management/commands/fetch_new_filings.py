@@ -93,11 +93,11 @@ def fetch_actors(s, uri, case_uri):
             obj, created = Actors.objects.update_or_create(**{'actor_uri':a['actor']['actor_uri'] }, defaults=defaults)
             for address in a['actor']['addresses']:
                 address_object, created = Address.objects.get_or_create(
-                    address_line1 = address['address_line1'],
+                    address_line1 = address.get('address_line1'),
                     address_line2 = address.get('address_line2'),
-                    address_city = address['address_city'],
-                    address_state_province_code = address['address_state_province_code'],
-                    address_postal_code = address['address_postal_code'],
+                    address_city = address.get('address_city'),
+                    address_state_province_code = address.get('address_state_province_code'),
+                    address_postal_code = address.get('address_postal_code'),
                 )
                 if address_object.geometry is None:
                     address_to_locate = address_object.__str__()
