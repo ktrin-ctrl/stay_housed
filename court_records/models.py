@@ -391,6 +391,14 @@ class CourtCase(models.Model):
         return f'{self.case_caption}'
 
 
+class OverlayGeography(models.Model):
+    dataset_name = models.CharField(max_length=254, blank=False, null=False)
+    display_name = models.CharField(max_length=254, blank=False, null=False)
+    identifier = models.CharField(max_length=254, blank=False, null=False)
+    geometry = models.MultiPolygonField(srid=4326)
+
+    def __str__(self):
+        return f'{self.dataset_name}: {self.display_name} ({self.identifier})'
 
 
 class Mailing(models.Model):
