@@ -399,7 +399,7 @@ class OverlayGeography(models.Model):
 
     class Meta:
         ordering = ['dataset_name', 'identifier']
-        verbose_name = 'Geogrpahy Overlay'
+        verbose_name = 'Geography Overlay'
         verbose_name_plural = 'Geography Overlays'
 
     def __str__(self):
