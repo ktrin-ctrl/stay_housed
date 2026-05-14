@@ -176,6 +176,7 @@ class Command(BaseCommand):
         parser.add_argument("--end_date", dest='end_date', default=localdate().strftime('%Y-%m-%d'))
         parser.add_argument("--fetch_courts", help="Retreive court data by FIPS county code")
         parser.add_argument("--fetch_details", help="Retreive case details by URI")
+        parser.add_argument("--fetch_updates", help="Retreive minutes, events, actors on open cases.")
 
 
     def handle(self, *args, **options):
