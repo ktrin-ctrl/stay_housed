@@ -397,6 +397,11 @@ class OverlayGeography(models.Model):
     identifier = models.CharField(max_length=254, blank=False, null=False)
     geometry = models.MultiPolygonField(srid=4326)
 
+    class Meta:
+        ordering = ['dataset_name', 'identifier']
+        verbose_name = 'Geogrpahy Overlay'
+        verbose_name_plural = 'Geography Overlays'
+
     def __str__(self):
         return f'{self.dataset_name}: {self.display_name} ({self.identifier})'
 
