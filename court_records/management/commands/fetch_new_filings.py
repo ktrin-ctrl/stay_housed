@@ -143,6 +143,25 @@ def fetch_actors(s, uri, case_uri):
                 print(relationship)
 
 
+def fetch_case_updates(s):
+    open_cases = CourtCase.objects.exclude(local_status_code='Decided').exclude(filed_date__gte=localdate(now()-timedelta(days=2)))
+    for new_case in open_cases:
+        fetch_actors(s, new_case.actors_uri, new_case.uri)
+
+        for model, field, uri_field in DETAIL_TYPES:
+            print(f'Fetching {model}')
+            uri_value = getattr(new_case, uri_field)
+            if uri_value is not None:
+                objects = fetch_details(s, model, uri_value, new_case.uri)
+                obj_field = getattr(new_case, field)
+                try:
+                    for x in objects:
+                        obj_field.add(x)
+                        new_case.save()
+                except Exception as e:
+                    print(e)
+
+
 class Command(BaseCommand):
     help = "Download new court cases from DoxPop"
          
@@ -180,6 +199,10 @@ class Command(BaseCommand):
 
         if options['fetch_details']:
             fetch_details(s, options['fetch_details'], '/case/1819041063441')
+            return
+
+        if options['fetch_updates']:
+            fetch_case_updates(s)
             return
 
         while True:
@@ -250,6 +273,8 @@ class Command(BaseCommand):
                 #print(resp.text)
                 break
             offset += limit
+
+       # fetch_case_updates(s)
 
         self.stdout.write(
             self.style.SUCCESS('Successfully downloaded new cases') 
