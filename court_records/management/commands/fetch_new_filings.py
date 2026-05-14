@@ -148,7 +148,12 @@ class Command(BaseCommand):
          
 
     def add_arguments(self, parser):
-        parser.add_argument("--start_date", dest='start_date', default=localdate(now()-timedelta(1)).strftime('%Y-%m-%d'))
+        try:
+            last_case_filed = CourtCase.objects.all().order_by('-filed_date').first().filed_date
+            start_date_str = (last_case_filed+timedelta(days=1)).strftime('%Y-%m-%d')
+        except:
+            start_date_str = localdate(now()-timedelta(days=1)).strftime('%Y-%m-%d')
+        parser.add_argument("--start_date", dest='start_date', default=start_date_str)
         parser.add_argument("--end_date", dest='end_date', default=localdate().strftime('%Y-%m-%d'))
         parser.add_argument("--fetch_courts", help="Retreive court data by FIPS county code")
         parser.add_argument("--fetch_details", help="Retreive case details by URI")
