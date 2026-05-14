@@ -128,7 +128,8 @@ def fetch_actors(s, uri, case_uri):
             other_actor = None
             relationship_verb = None
             try:
-                other_actor = a['relationships'][0]['other_actor_uri']
+                other_actor_uri = a['relationships'][0]['other_actor_uri']
+                other_actor = Actors.objects.filter(actor_uri=other_actor_uri).first()
                 relationship_verb = a['relationships'][0]['relationship_verb']
             except:
                 pass 
