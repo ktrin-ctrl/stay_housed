@@ -128,8 +128,8 @@ def fetch_actors(s, uri, case_uri):
             other_actor = None
             relationship_verb = None
             try:
-                other_actor = a['relationships']['other_actor_uri']
-                relationship_verb = a['relationships']['relationship_verb']
+                other_actor = a['relationships'][0]['other_actor_uri']
+                relationship_verb = a['relationships'][0]['relationship_verb']
             except:
                 pass 
             finally:
