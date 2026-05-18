@@ -72,7 +72,7 @@ def fetch_actor(s, uri):
         resp = s.get(BASE_URL+uri+'.json', auth=(USERNAME, PASSWORD) )
         resp_json = resp.json()
         obj, created = Actors.objects.update_or_create(**{'actor_uri':uri }, defaults=resp_json[0])
-        return obj
+        return obj 
 
 
 def fetch_actors(s, uri, case_uri):
