@@ -16,5 +16,5 @@ admin.cityrising.anymouse.org {
 }
 
 cityrising2.anymouse.org {
-    redir https://cityrising.anymouse.org/{uri}
+    redir https://cityrising.anymouse.org{uri}
 }
