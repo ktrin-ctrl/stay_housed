@@ -109,7 +109,7 @@ def fetch_actors(s, uri, case_uri):
                 obj.addresses.add(address_object)    
 
             for phone in a['actor']['phones']:
-                phone_object = Phone.objects.create(
+                phone_object = Phone.objects.get_or_create(
                     phone_number = phone['phone_number'],
                     phone_type = phone['phone_type'],
                     voice_or_fax_code = phone['voice_or_fax_code']
@@ -117,7 +117,7 @@ def fetch_actors(s, uri, case_uri):
                 obj.phones.add(phone_object)
 
             for identifier in a['actor']['actor_identifiers']:
-                identifier_object = Identifier.objects.create(
+                identifier_object = Identifier.objects.get_or_create(
                     identifier_subtype = identifier['actor_identifier_subtype'],
                     identifier_type = identifier['actor_identifier_type'],
                     identifier_text = identifier['actor_identifier_text']
@@ -134,7 +134,7 @@ def fetch_actors(s, uri, case_uri):
             except:
                 pass 
             finally:
-                relationship = Relationship.objects.create(
+                relationship = Relationship.objects.get_or_create(
                     actor=obj,
                     court_case=CourtCase.objects.get(uri=case_uri),
                     assigned_case_role=a['assigned_case_role'],
@@ -152,16 +152,14 @@ def fetch_case_updates(s):
         for model, field, uri_field in DETAIL_TYPES:
             print(f'Fetching {model}')
             uri_value = getattr(new_case, uri_field)
+            obj_field = getattr(new_case, field)
             if uri_value is not None:
                 objects = fetch_details(s, model, uri_value, new_case.uri)
-                obj_field = getattr(new_case, field)
-                try:
+                if objects is not None:
                     for x in objects:
                         obj_field.add(x)
                         new_case.save()
-                except Exception as e:
-                    print(e)
-
+                    
 
 class Command(BaseCommand):
     help = "Download new court cases from DoxPop"
@@ -258,15 +256,13 @@ class Command(BaseCommand):
                     for model, field, uri_field in DETAIL_TYPES:
                         print(f'Fetching {model}')
                         uri_value = getattr(new_case, uri_field)
+                        obj_field = getattr(new_case, field)
                         if uri_value is not None:
-                            objects = fetch_details(s, model, uri_value, c.get('case_uri'))
-                            obj_field = getattr(new_case, field)
-                            try:
+                            objects = fetch_details(s, model, uri_value, new_case.uri)
+                            if objects is not None:
                                 for x in objects:
                                     obj_field.add(x)
                                     new_case.save()
-                            except Exception as e:
-                                print(e)
                                 
                 if cases_processed < 200:
                     break
