@@ -90,8 +90,11 @@ services:
       MAPBOX_TOKEN: ${MAPBOX_TOKEN}
     volumes:
     - ./staticfiles:/app/staticfiles
+    labels:
+      ofelia.enabled: "true"
+      ofelia.job-exec.refresh.schedule: "0 03 * * 2-6"
+      ofelia.job-exec.refresh.command: "python /app/manage.py fetch_new_filings"
 
-    
     
   ofelia:
     image: mcuadros/ofelia:latest
@@ -101,12 +104,7 @@ services:
     command: daemon --docker
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-    labels:
-      ofelia.enabled: "true"
-      ofelia.job-run.fetch-cases.container: 'django'
-      ofelia.job-run.fetch-cases.schedule: "0 03 * * 2-6"
-      ofelia.job-run.fetch-cases.no-overlap: "true"
-      ofelia.job-run.fetch-cases.command: "python /app/manage.py fetch_new_filings"
+
 
 volumes:
     pg_data:
