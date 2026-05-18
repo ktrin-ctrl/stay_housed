@@ -3,7 +3,7 @@
 }
 
 
-cityrising2.anymouse.org {
+cityrising.anymouse.org {
     reverse_proxy metabase:3000
 }
 
@@ -13,4 +13,8 @@ admin.cityrising.anymouse.org {
         file_server
     }
     reverse_proxy  django:8000
+}
+
+cityrising2.anymouse.org {
+    redir https://cityrising.anymouse.org/{uri}
 }
