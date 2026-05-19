@@ -98,7 +98,7 @@ def fetch_actors(s, uri, case_uri):
                     address_city = address.get('address_city'),
                     address_state_province_code = address.get('address_state_province_code'),
                     address_postal_code = address.get('address_postal_code'),
-                )
+                ).first()
                 if address_object.geometry is None:
                     address_to_locate = address_object.__str__()
                     location = geocode.geocode_street_address(address_to_locate)
@@ -113,7 +113,7 @@ def fetch_actors(s, uri, case_uri):
                     phone_number = phone['phone_number'],
                     phone_type = phone['phone_type'],
                     voice_or_fax_code = phone['voice_or_fax_code']
-                )
+                ).first()
                 obj.phones.add(phone_object)
 
             for identifier in a['actor']['actor_identifiers']:
@@ -122,7 +122,7 @@ def fetch_actors(s, uri, case_uri):
                     identifier_type = identifier['actor_identifier_type'],
                     identifier_text = identifier['actor_identifier_text']
 
-                )
+                ).first()
                 obj.identifiers.add(identifier_object)
 
             other_actor = None
