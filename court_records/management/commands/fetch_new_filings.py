@@ -156,13 +156,21 @@ def fetch_actors(s, uri, case_uri):
             except:
                 pass 
             finally:
-                relationship = Relationship.objects.get_or_create(
+                relationship = Relationship.objects.filter(
                     actor=obj,
                     court_case=CourtCase.objects.get(uri=case_uri),
                     assigned_case_role=a['assigned_case_role'],
                     other_actor=other_actor,
                     relationship_verb=relationship_verb,
-                )
+                ).first()
+                if relationship is None:
+                    relationship = Relationship.objects.create(
+                        actor=obj,
+                        court_case=CourtCase.objects.get(uri=case_uri),
+                        assigned_case_role=a['assigned_case_role'],
+                        other_actor=other_actor,
+                        relationship_verb=relationship_verb,
+                    )
                 print(relationship)
 
 
