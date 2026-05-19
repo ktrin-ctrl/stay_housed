@@ -109,7 +109,7 @@ def fetch_actors(s, uri, case_uri):
                 obj.addresses.add(address_object)    
 
             for phone in a['actor']['phones']:
-                phone_object = Phone.objects.get_or_create(
+                phone_object, created = Phone.objects.get_or_create(
                     phone_number = phone['phone_number'],
                     phone_type = phone['phone_type'],
                     voice_or_fax_code = phone['voice_or_fax_code']
@@ -117,7 +117,7 @@ def fetch_actors(s, uri, case_uri):
                 obj.phones.add(phone_object)
 
             for identifier in a['actor']['actor_identifiers']:
-                identifier_object = Identifier.objects.get_or_create(
+                identifier_object, created = Identifier.objects.get_or_create(
                     identifier_subtype = identifier['actor_identifier_subtype'],
                     identifier_type = identifier['actor_identifier_type'],
                     identifier_text = identifier['actor_identifier_text']
