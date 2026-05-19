@@ -62,7 +62,7 @@ class CourtCaseAdmin(admin.ModelAdmin):
     #excluded = ['']
     list_filter = ['court', 'filed_date', 'local_status_code', 'is_marked_expunged']
     search_fields = ["subject_prop_hardcode__address_line1","subject_prop_hardcode__address_line2", "subject_prop_hardcode__address_postal_code",  "subject_prop_hardcode__address_city", "actors__full_name", "case_number", "case_caption"]
-    filter_vertical = ('actors', 'events', 'minutes', 'receivables',)
+    filter_vertical = ('events', 'minutes', 'receivables',)
 
 class RelationshipAdmin(admin.ModelAdmin):
     pass
