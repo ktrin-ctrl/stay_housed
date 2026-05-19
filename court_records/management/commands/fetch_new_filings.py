@@ -92,13 +92,22 @@ def fetch_actors(s, uri, case_uri):
             }
             obj, created = Actors.objects.update_or_create(**{'actor_uri':a['actor']['actor_uri'] }, defaults=defaults)
             for address in a['actor']['addresses']:
-                address_object, created = Address.objects.get_or_create(
+
+                address_object = Address.objects.filter(
                     address_line1 = address.get('address_line1'),
                     address_line2 = address.get('address_line2'),
                     address_city = address.get('address_city'),
                     address_state_province_code = address.get('address_state_province_code'),
                     address_postal_code = address.get('address_postal_code'),
                 ).first()
+                if address_object is None:
+                    address_object = Address.objects.create(
+                        address_line1 = address.get('address_line1'),
+                        address_line2 = address.get('address_line2'),
+                        address_city = address.get('address_city'),
+                        address_state_province_code = address.get('address_state_province_code'),
+                        address_postal_code = address.get('address_postal_code'),
+                    )
                 if address_object.geometry is None:
                     address_to_locate = address_object.__str__()
                     location = geocode.geocode_street_address(address_to_locate)
@@ -109,20 +118,33 @@ def fetch_actors(s, uri, case_uri):
                 obj.addresses.add(address_object)    
 
             for phone in a['actor']['phones']:
-                phone_object, created = Phone.objects.get_or_create(
+                phone_object = Phone.objects.filter(
                     phone_number = phone['phone_number'],
                     phone_type = phone['phone_type'],
                     voice_or_fax_code = phone['voice_or_fax_code']
                 ).first()
+                if phone_object is None:
+                    phone_object = Phone.objects.create(
+                        phone_number = phone['phone_number'],
+                        phone_type = phone['phone_type'],
+                        voice_or_fax_code = phone['voice_or_fax_code']
+                    )
                 obj.phones.add(phone_object)
 
             for identifier in a['actor']['actor_identifiers']:
-                identifier_object, created = Identifier.objects.get_or_create(
+                identifier_object = Identifier.objects.filter(
                     identifier_subtype = identifier['actor_identifier_subtype'],
                     identifier_type = identifier['actor_identifier_type'],
-                    identifier_text = identifier['actor_identifier_text']
-
+                    identifier_text = identifier['actor_identifier_text'],
                 ).first()
+
+                if identifier_object is None:
+                    identifier_object = Identifier.objects.create(
+                    identifier_subtype = identifier['actor_identifier_subtype'],
+                    identifier_type = identifier['actor_identifier_type'],
+                    identifier_text = identifier['actor_identifier_text'],
+                )
+
                 obj.identifiers.add(identifier_object)
 
             other_actor = None
