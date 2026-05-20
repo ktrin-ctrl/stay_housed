@@ -92,7 +92,7 @@ services:
     - ./staticfiles:/app/staticfiles
     labels:
       ofelia.enabled: "true"
-      ofelia.job-exec.refresh.schedule: "0 03 * * 2-6"
+      ofelia.job-exec.refresh.schedule: "0 3 * * 2-6"
       ofelia.job-exec.refresh.command: "python /app/manage.py fetch_new_filings"
 
     
