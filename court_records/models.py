@@ -6,9 +6,10 @@ class API_Usage(models.Model):
     called_url = models.URLField()
     records_returned = models.IntegerField()
     status_code = models.CharField(max_length=5)
+    response_text=models.TextField(blank=True)
 
     class Meta:
-        ordering = ['created_at']
+        ordering = ['-created_at']
         verbose_name = 'API Usage Record'
         verbose_name_plural = 'API Usage Records'
         

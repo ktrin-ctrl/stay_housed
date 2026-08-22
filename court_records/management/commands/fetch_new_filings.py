@@ -244,6 +244,7 @@ class Command(BaseCommand):
                 called_url=resp.request.url, 
                 records_returned=len(resp.json()) or 0, 
                 status_code=resp.status_code,
+                response_text=resp.text,
             )
             if resp.status_code == 200 and len(resp.text)>10:
                 cases_json = resp.json()
