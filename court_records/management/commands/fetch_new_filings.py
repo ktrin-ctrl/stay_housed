@@ -111,7 +111,7 @@ def fetch_actors(s, uri, case_uri):
                 if address_object.geometry is None:
                     address_to_locate = address_object.__str__()
                     location = geocode.geocode_street_address(address_to_locate)
-                    if location['Geocoding Accuracy'] in ['rooftop', 'parcel', 'point', 'interpolated']:
+                    if location['Geocoding Accuracy'] in ['rooftop', 'parcel', 'point', 'interpolated', 'intersection', 'approximate', 'street']:
                         address_object.geometry = location['PNT_WKT']
                     address_object.geocoding_accuracy = location['Geocoding Accuracy']
                     address_object.save()
